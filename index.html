@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tempus — Haute Horlogerie</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@200;300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:   #F5F2ED;
+      --linen:   #EDE8DF;
+      --taupe:   #C8BFB0;
+      --warm-gray: #9A9186;
+      --charcoal: #3A3530;
+      --deep:    #1E1A17;
+      --gold:    #B89A6A;
+      --gold-lt: #D4B98A;
+      --white:   #FDFBF8;
+      --shadow:  rgba(30,26,23,0.12);
+    }
+
+    body {
+      background: var(--cream);
+      font-family: 'Josefin Sans', sans-serif;
+      color: var(--charcoal);
+    }
+
+    /* ─── TOP BAR ─────────────────────────────────────── */
+    .top-bar {
+      background: var(--deep);
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 48px;
+      gap: 8px;
+    }
+
+    .top-bar a {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 5px 18px;
+      border-radius: 1px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    /* LOGIN – ghost */
+    .btn-login {
+      color: var(--taupe);
+      border: 1px solid rgba(200,191,176,0.35);
+    }
+    .btn-login:hover {
+      color: var(--gold-lt);
+      border-color: var(--gold);
+      background: rgba(184,154,106,0.08);
+    }
+
+    /* SIGN UP – filled */
+    .btn-signup {
+      color: var(--deep);
+      background: var(--gold);
+      border: 1px solid var(--gold);
+    }
+    .btn-signup:hover {
+      background: var(--gold-lt);
+      border-color: var(--gold-lt);
+    }
+
+    /* PHP note – hidden utility */
+    .top-bar form { display: none; }
+
+    /* ─── MAIN HEADER ─────────────────────────────────── */
+    header.main-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--linen);
+      box-shadow: 0 2px 24px var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 48px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+
+    /* ─── LOGO ──────────────────────────────────────────  */
+    .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-decoration: none;
+      flex-shrink: 0;
+      line-height: 1;
+      gap: 2px;
+    }
+    .logo-word {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 0.22em;
+      color: var(--deep);
+      text-transform: uppercase;
+    }
+    .logo-sub {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px;
+      font-weight: 200;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    /* ─── DIVIDER ───────────────────────────────────────  */
+    .divider {
+      width: 1px;
+      height: 36px;
+      background: var(--linen);
+      flex-shrink: 0;
+    }
+
+    /* ─── NAV ───────────────────────────────────────────  */
+    nav.main-nav {
+      flex: 1;
+    }
+
+    nav.main-nav > ul {
+      display: flex;
+      list-style: none;
+      gap: 4px;
+      align-items: center;
+      height: 80px;
+    }
+
+    nav.main-nav > ul > li {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    /* top-level link */
+    nav.main-nav > ul > li > a {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+      padding: 0 16px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    nav.main-nav > ul > li > a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 16px; right: 16px;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.25s ease;
+      transform-origin: left;
+    }
+
+    nav.main-nav > ul > li:hover > a,
+    nav.main-nav > ul > li > a.active {
+      color: var(--deep);
+    }
+    nav.main-nav > ul > li:hover > a::after,
+    nav.main-nav > ul > li > a.active::after {
+      transform: scaleX(1);
+    }
+
+    /* HOME has no dropdown arrow */
+    li.has-dropdown > a::before {
+      content: '›';
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) rotate(90deg);
+      font-size: 10px;
+      color: var(--gold);
+      opacity: 0;
+      transition: opacity 0.2s, bottom 0.2s;
+    }
+    li.has-dropdown:hover > a::before {
+      opacity: 1;
+      bottom: 24px;
+    }
+
+    /* ─── DROPDOWN ──────────────────────────────────────  */
+    .dropdown {
+      position: absolute;
+      top: calc(100% + 0px);
+      left: 0;
+      min-width: 220px;
+      background: var(--white);
+      border-top: 2px solid var(--gold);
+      border-bottom: 1px solid var(--linen);
+      border-left: 1px solid var(--linen);
+      border-right: 1px solid var(--linen);
+      box-shadow: 0 12px 40px var(--shadow);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
+      z-index: 200;
+    }
+
+    li.has-dropdown:hover .dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown ul {
+      list-style: none;
+      padding: 10px 0;
+    }
+
+    .dropdown ul li a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 22px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      text-decoration: none;
+      transition: color 0.18s, background 0.18s, padding-left 0.18s;
+    }
+
+    .dropdown ul li a:hover {
+      color: var(--deep);
+      background: var(--linen);
+      padding-left: 28px;
+    }
+
+    .dropdown ul li a .dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.18s;
+    }
+    .dropdown ul li a:hover .dot {
+      opacity: 1;
+    }
+
+    /* dropdown label header */
+    .dropdown-label {
+      padding: 14px 22px 6px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--taupe);
+      border-bottom: 1px solid var(--linen);
+      margin-bottom: 4px;
+    }
+
+    /* ─── HERO PLACEHOLDER ──────────────────────────────  */
+    .hero {
+      height: 320px;
+      background: linear-gradient(135deg, var(--linen) 0%, var(--cream) 60%, var(--taupe) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      color: var(--deep);
+      text-transform: uppercase;
+    }
+    .hero-sub {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 200;
+      letter-spacing: 0.45em;
+      color: var(--warm-gray);
+      text-transform: uppercase;
+    }
+    .hero-rule {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 6px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════
+       TOP BAR  –  Login / Sign Up
+       PHP: action="login.php" | action="register.php"
+  ══════════════════════════════════════════════════════ -->
+  <div class="top-bar">
+
+    <!--
+      INTEGRAZIONE PHP/SQL:
+      Sostituire i tag <a> con form POST oppure controllare session_status()
+      e mostrare username/logout se l'utente è già autenticato.
+
+      Esempio:
+        <?php if (isset($_SESSION['user_id'])): ?>
+          <span class="btn-login">Benvenuto, <?= htmlspecialchars($_SESSION['username']) ?></span>
+          <a href="logout.php" class="btn-login">Logout</a>
+        <?php else: ?>
+          <a href="login.php" class="btn-login">Accedi</a>
+          <a href="register.php" class="btn-signup">Registrati</a>
+        <?php endif; ?>
+    -->
+
+    <a href="login.php" class="btn-login">Accedi</a>
+    <a href="register.php" class="btn-signup">Registrati</a>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       MAIN HEADER  –  Logo + Navigation
+  ══════════════════════════════════════════════════════ -->
+  <header class="main-header">
+    <div class="header-inner">
+
+      <!-- LOGO -->
+      <a href="index.php" class="logo">
+        <span class="logo-word">Tempus</span>
+        <span class="logo-sub">Haute Horlogerie</span>
+      </a>
+
+      <div class="divider"></div>
+
+      <!-- NAVIGATION -->
+      <nav class="main-nav" aria-label="Menu principale">
+        <ul>
+
+          <!-- HOME -->
+          <li>
+            <a href="index.php" class="active">Home</a>
+          </li>
+
+          <!-- MODELLI -->
+          <!--
+            INTEGRAZIONE PHP/SQL:
+            Le voci di questo menu possono essere generate dinamicamente:
+            <?php
+              $stmt = $pdo->query("SELECT id, nome, slug FROM categorie_modello ORDER BY nome");
+              while ($row = $stmt->fetch()): ?>
+                <li><a href="modelli.php?cat=<?= $row['slug'] ?>">
+                  <span class="dot"></span><?= htmlspecialchars($row['nome']) ?>
+                </a></li>
+            <?php endwhile; ?>
+          -->
+          <li class="has-dropdown">
+            <a href="modelli.php">Modelli</a>
+            <div class="dropdown">
+              <div class="dropdown-label">Tipologia</div>
+              <ul>
+                <li><a href="modelli.php?cat=solo-tempo"><span class="dot"></span>Solo Tempo</a></li>
+                <li><a href="modelli.php?cat=cronografo"><span class="dot"></span>Cronografo</a></li>
+                <li><a href="modelli.php?cat=gmt"><span class="dot"></span>GMT / Dual Time</a></li>
+                <li><a href="modelli.php?cat=calendario"><span class="dot"></span>Calendario</a></li>
+                <li><a href="modelli.php?cat=tourbillon"><span class="dot"></span>Tourbillon</a></li>
+                <li><a href="modelli.php?cat=sport"><span class="dot"></span>Sport &amp; Diver</a></li>
+                <li><a href="modelli.php?cat=dress-watch"><span class="dot"></span>Dress Watch</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <!-- MOVIMENTO -->
+          <li class="has-dropdown">
+            <a href="movimento.php">Movimento</a>
+            <div class="dropdown">
+              <div class="dropdown-label">Meccanismo</div>
+              <ul>
+                <li><a href="movimento.php?tipo=manuale"><span class="dot"></span>Ricarica Manuale</a></li>
+                <li><a href="movimento.php?tipo=automatico"><span class="dot"></span>A Massa Oscillante</a></li>
+                <li><a href="movimento.php?tipo=solare"><span class="dot"></span>Solare</a></li>
+                <li><a href="movimento.php?tipo=quartz"><span class="dot"></span>Quarzo</a></li>
+                <li><a href="movimento.php?tipo=spring-drive"><span class="dot"></span>Spring Drive</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <!-- MARCHE -->
+          <li class="has-dropdown">
+            <a href="marche.php">Marche</a>
+            <div class="dropdown">
+              <div class="dropdown-label">Maison</div>
+              <ul>
+                <li><a href="marche.php?brand=rolex"><span class="dot"></span>Rolex</a></li>
+                <li><a href="marche.php?brand=patek-philippe"><span class="dot"></span>Patek Philippe</a></li>
+                <li><a href="marche.php?brand=audemars-piguet"><span class="dot"></span>Audemars Piguet</a></li>
+                <li><a href="marche.php?brand=cartier"><span class="dot"></span>Cartier</a></li>
+                <li><a href="marche.php?brand=omega"><span class="dot"></span>Omega</a></li>
+              </ul>
+            </div>
+          </li>
+
+        </ul>
+      </nav>
+      <!-- end nav -->
+
+    </div>
+  </header>
+
+
+  <!-- ═══════════════════════════════════════════════════
+       HERO – placeholder pagina
+  ══════════════════════════════════════════════════════ -->
+  <section class="hero">
+    <p class="hero-sub">La precisione è un'arte</p>
+    <div class="hero-rule"></div>
+    <h1 class="hero-title">Haute Horlogerie</h1>
+  </section>
+
+
+</body>
+</html>
