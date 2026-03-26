@@ -313,6 +313,111 @@
       background: var(--gold);
       margin: 6px 0;
     }
+
+    /* Layout Generale */
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    font-size: 2rem;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Grid System */
+.coin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+/* Card Style */
+.coin-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.coin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.coin-image {
+    position: relative;
+    height: 200px;
+    background: #f9f9f9;
+}
+
+.coin-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #d4af37; /* Colore Oro */
+    color: white;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Info Moneta */
+.coin-info {
+    padding: 20px;
+}
+
+.coin-name {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    color: #222;
+}
+
+.coin-user {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.coin-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 15px;
+}
+
+.coin-price {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #2c3e50;
+}
+
+.btn-view {
+    text-decoration: none;
+    font-size: 0.8rem;
+    color: #d4af37;
+    border: 1px solid #d4af37;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.btn-view:hover {
+    background: #d4af37;
+    color: #fff;
+}
   </style>
 </head>
 <body>
@@ -334,7 +439,7 @@
           <a href="logout.php" class="btn-login">Logout</a>
         <?php else: ?>
           <a href="login.php" class="btn-login">Accedi</a>
-          <a href="register.php" class="btn-signup">Registrati</a>
+          <a href="register.php" class="btn-signup">Registrati</a>  
         <?php endif; ?>
     -->
 
@@ -351,8 +456,8 @@
 
       <!-- LOGO -->
       <a href="index.php" class="logo">
-        <span class="logo-word">Tempus</span>
-        <span class="logo-sub">Haute Horlogerie</span>
+        <span class="logo-word">CoinColl </span>
+        <span class="logo-sub">Storia nel Metallo</span>
       </a>
 
       <div class="divider"></div>
@@ -379,47 +484,30 @@
             <?php endwhile; ?>
           -->
           <li class="has-dropdown">
-            <a href="modelli.php">Modelli</a>
+            <a href="anni.php">Anni</a>
             <div class="dropdown">
-              <div class="dropdown-label">Tipologia</div>
+              <div class="dropdown-label">Epoche</div>
               <ul>
-                <li><a href="modelli.php?cat=solo-tempo"><span class="dot"></span>Solo Tempo</a></li>
-                <li><a href="modelli.php?cat=cronografo"><span class="dot"></span>Cronografo</a></li>
-                <li><a href="modelli.php?cat=gmt"><span class="dot"></span>GMT / Dual Time</a></li>
-                <li><a href="modelli.php?cat=calendario"><span class="dot"></span>Calendario</a></li>
-                <li><a href="modelli.php?cat=tourbillon"><span class="dot"></span>Tourbillon</a></li>
-                <li><a href="modelli.php?cat=sport"><span class="dot"></span>Sport &amp; Diver</a></li>
-                <li><a href="modelli.php?cat=dress-watch"><span class="dot"></span>Dress Watch</a></li>
+                <li><a href="anni.php?cat=Euro-Italia"><span class="dot"></span>Euro Ialia</a></li>
+                <li><a href="anni.php?cat=Repubblica-Italiana"><span class="dot"></span>Repubblica Italiana</a></li>
+                <li><a href="anni.php?cat=Regno-d'Italia-(1861-1922)"><span class="dot"></span>Regno d'Italia (1861-1922)</a></li>
+                <li><a href="anni.php?cat=Regno-d'Italia-(1922-1943)"><span class="dot"></span>Regno d'Italia (1922-1943)</a></li>
+                <li><a href="anni.php?cat=Regnod'Italia(1943-1946)"><span class="dot"></span>Regno d'Italia (1943-1946)</a></li>
               </ul>
             </div>
           </li>
 
           <!-- MOVIMENTO -->
           <li class="has-dropdown">
-            <a href="movimento.php">Movimento</a>
+            <a href="materiale.php">Materiale</a>
             <div class="dropdown">
-              <div class="dropdown-label">Meccanismo</div>
+              <div class="dropdown-label">Materiale Moneta</div>
               <ul>
-                <li><a href="movimento.php?tipo=manuale"><span class="dot"></span>Ricarica Manuale</a></li>
-                <li><a href="movimento.php?tipo=automatico"><span class="dot"></span>A Massa Oscillante</a></li>
-                <li><a href="movimento.php?tipo=solare"><span class="dot"></span>Solare</a></li>
-                <li><a href="movimento.php?tipo=quartz"><span class="dot"></span>Quarzo</a></li>
-                <li><a href="movimento.php?tipo=spring-drive"><span class="dot"></span>Spring Drive</a></li>
-              </ul>
-            </div>
-          </li>
-
-          <!-- MARCHE -->
-          <li class="has-dropdown">
-            <a href="marche.php">Marche</a>
-            <div class="dropdown">
-              <div class="dropdown-label">Maison</div>
-              <ul>
-                <li><a href="marche.php?brand=rolex"><span class="dot"></span>Rolex</a></li>
-                <li><a href="marche.php?brand=patek-philippe"><span class="dot"></span>Patek Philippe</a></li>
-                <li><a href="marche.php?brand=audemars-piguet"><span class="dot"></span>Audemars Piguet</a></li>
-                <li><a href="marche.php?brand=cartier"><span class="dot"></span>Cartier</a></li>
-                <li><a href="marche.php?brand=omega"><span class="dot"></span>Omega</a></li>
+                <li><a href="materiale.php?tipo=argento"><span class="dot"></span>Argento</a></li>
+                <li><a href="materiale.php?tipo=oro"><span class="dot"></span>Oro</a></li>
+                <li><a href="materiale.php?tipo=nickel"><span class="dot"></span>Nickel</a></li>
+                <li><a href="materiale.php?tipo=rame"><span class="dot"></span>Rame</a></li>
+                <li><a href="materiale.php?tipo=bi-tono"><span class="dot"></span>Bi Tono</a></li>
               </ul>
             </div>
           </li>
@@ -436,10 +524,49 @@
        HERO – placeholder pagina
   ══════════════════════════════════════════════════════ -->
   <section class="hero">
-    <p class="hero-sub">La precisione è un'arte</p>
+    <p class="hero-sub">La storia è un'arte</p>
     <div class="hero-rule"></div>
-    <h1 class="hero-title">Haute Horlogerie</h1>
+    <h1 class="hero-title">CoinColl</h1>
   </section>
+
+  <main class="container">
+    <div class="section-header">
+        <h2 class="section-title">Ultime Inserzioni</h2>
+        <div class="hero-rule" style="margin: 10px 0 30px 0; width: 50px;"></div>
+    </div>
+
+    <div class="coin-grid">
+        <article class="coin-card">
+            <div class="coin-image">
+                <img src="https://via.placeholder.com/300x200" alt="Moneta d'oro">
+                <span class="badge">Raro</span>
+            </div>
+            <div class="coin-info">
+                <h3 class="coin-name">500 Lire "Caravelle" - Prova</h3>
+                <p class="coin-user">Pubblicato da: <strong>@NumisExpert</strong></p> 
+                <div class="coin-footer">
+                    <span class="coin-price">€ 450,00</span>
+                    <a href="dettagli.php?id=1" class="btn-view">Vedi Dettagli</a>
+                </div>
+            </div>
+        </article>
+
+        <article class="coin-card">
+            <div class="coin-image">
+                <img src="https://via.placeholder.com/300x200" alt="Moneta argento">
+            </div>
+            <div class="coin-info">
+                <h3 class="coin-name">20 Lire 1928 "Elmetto"</h3>
+                <p class="coin-user">Pubblicato da: <strong>@MarcoCoin</strong></p>
+                <div class="coin-footer">
+                    <span class="coin-price">€ 120,00</span>
+                    <a href="dettagli.php?id=2" class="btn-view">Vedi Dettagli</a>
+                </div>
+            </div>
+        </article>
+
+        </div>
+      </main>
 
 
 </body>
