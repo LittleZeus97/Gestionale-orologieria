@@ -8,7 +8,77 @@ $stmt = $pdo->query('
   JOIN utenti u ON m.UtentePubbli = u.CodUtente
 ');
 $monete = $stmt->fetchAll();
+
+$categories = [
+    'Euro-Italia' => ['min' => 2002, 'max' => 9999], // Euro introdotto nel 2002
+    'Repubblica-Italiana' => ['min' => 1946, 'max' => 2001],
+    'Regno-d\'Italia-(1861-1922)' => ['min' => 1861, 'max' => 1922],
+    'Regno-d\'Italia-(1922-1943)' => ['min' => 1922, 'max' => 1943],
+    'Regnod\'Italia(1943-1946)' => ['min' => 1943, 'max' => 1946], // Corretto l'apostrofo
+];
+
+// Ottieni la categoria dalla query string
+$cat = $_GET['cat'] ?? null;
+$filter = null;
+if ($cat && isset($categories[$cat])) {
+    $filter = $categories[$cat];
+}
+
+// Query per le monete filtrate
+$query = '
+  SELECT m.CodMoneta, m.nome, m.prezzo, m.Materiale, m.AnnoEmi, u.nome AS autore
+  FROM monete m
+  JOIN utenti u ON m.UtentePubbli = u.CodUtente
+';
+$params = [];
+if ($filter) {
+    $query .= ' WHERE m.AnnoEmi BETWEEN ? AND ?';
+    $params = [$filter['min'], $filter['max']];
+}
+$query .= ' ORDER BY m.AnnoEmi DESC';
+
+$stmt = $pdo->prepare($query);
+$stmt->execute($params);
+$monete = $stmt->fetchAll();
+
+
+// Mappa dei tipi di materiale
+$materiali = [
+    'argento' => 'Argento',
+    'oro' => 'Oro',
+    'nickel' => 'Altro', // Per "nickel" filtra materiali diversi da argento e oro
+];
+
+// Ottieni il tipo dalla query string
+$tipo = $_GET['tipo'] ?? null;
+$filter = null;
+if ($tipo && isset($materiali[$tipo])) {
+    $filter = $tipo;
+}
+
+// Query per le monete filtrate
+$query = '
+  SELECT m.CodMoneta, m.nome, m.prezzo, m.Materiale, m.AnnoEmi, u.nome AS autore
+  FROM monete m
+  JOIN utenti u ON m.UtentePubbli = u.CodUtente
+';
+$params = [];
+if ($filter) {
+    if ($filter === 'nickel') {
+        $query .= ' WHERE m.Materiale NOT IN (?, ?)';
+        $params = ['Argento', 'Oro'];
+    } else {
+        $query .= ' WHERE m.Materiale = ?';
+        $params = [$materiali[$filter]];
+    }
+}
+$query .= ' ORDER BY m.AnnoEmi DESC';
+
+$stmt = $pdo->prepare($query);
+$stmt->execute($params);
+$monete = $stmt->fetchAll();
 ?>
+
 
 
 <!DOCTYPE html>
@@ -475,7 +545,7 @@ $monete = $stmt->fetchAll();
             <a href="index.php" class="active">Home</a>
           </li>
 
-          <!-- MODELLI -->
+          <!-- ANNI -->
           <!--
             INTEGRAZIONE PHP/SQL:
             Le voci di questo menu possono essere generate dinamicamente:
@@ -492,28 +562,51 @@ $monete = $stmt->fetchAll();
             <div class="dropdown">
               <div class="dropdown-label">Epoche</div>
               <ul>
-                <li><a href="anni.php?cat=Euro-Italia"><span class="dot"></span>Euro Italia</a></li>
-                <li><a href="anni.php?cat=Repubblica-Italiana"><span class="dot"></span>Repubblica Italiana</a></li>
-                <li><a href="anni.php?cat=Regno-d'Italia-(1861-1922)"><span class="dot"></span>Regno d'Italia (1861-1922)</a></li>
-                <li><a href="anni.php?cat=Regno-d'Italia-(1922-1943)"><span class="dot"></span>Regno d'Italia (1922-1943)</a></li>
-                <li><a href="anni.php?cat=Regnod'Italia(1943-1946)"><span class="dot"></span>Regno d'Italia (1943-1946)</a></li>
+                <?php if ($cat === 'Euro-Italia'): ?>
+                  <li><a href="anni.php?cat=Euro-Italia">Euro Italia</a></li>
+                <?php endif; ?>
+                <?php if ($cat === 'Repubblica-Italiana'): ?>
+                  <li><a href="anni.php?cat=Repubblica-Italiana">Repubblica Italiana</a></li>
+                <?php endif; ?>
+                <?php if ($cat === 'Regno-d\'Italia-(1861-1922)'): ?>
+                  <li><a href="anni.php?cat=Regno-d\'Italia-(1861-1922)">Regno d'Italia (1861-1922)</a></li>
+                <?php endif; ?>
+                <?php if ($cat === 'Euro-Italia'): ?>
+                  <li><a href="anni.php?cat=Euro-Italia">Euro Italia</a></li>
+                <?php endif; ?>
+                <?php if ($cat === 'Regno-d\'Italia-(1922-1943)'): ?>
+                  <li><a href="anni.php?cat=Regno-d\'Italia-(1922-1943)">Regno d'Italia (1922-1943)</a></li>
+                <?php endif; ?>
+                <?php if ($cat === 'Regno-d\'Italia-(1943-1946)'): ?>
+                  <li><a href="anni.php?cat=Regno-d\'Italia-(1943-1946)">Regno d'Italia (1943-1946)</a></li>
+                <?php endif; ?>
               </ul>
             </div>
           </li>
 
-          <!-- MOVIMENTO -->
+          <?php if ($cat === 'Euro-Italia'): ?>
+            <li><a href="anni.php?cat=Euro-Italia">Euro Italia</a></li>
+          <?php endif; ?>
+          <!-- MATERIALE -->
           <li class="has-dropdown">
             <a href="materiale.php">Materiale</a>
             <div class="dropdown">
               <div class="dropdown-label">Materiale Moneta</div>
               <ul>
-                <li><a href="materiale.php?tipo=argento"><span class="dot"></span>Argento</a></li>
-                <li><a href="materiale.php?tipo=oro"><span class="dot"></span>Oro</a></li>
-                <li><a href="materiale.php?tipo=nickel"><span class="dot"></span>Altro</a></li>
+                <?php if ($tipo === 'argento'): ?>
+                  <li><a href="materiale.php?tipo=argento"><span class="dot"></span>Argento</a></li>
+                <?php endif; ?>
+                <?php if ($tipo === 'oro'): ?>
+                  <li><a href="materiale.php?tipo=oro"><span class="dot"></span>Oro</a></li>
+                <?php endif; ?>
+                <?php if ($tipo === 'nickel'): ?>
+                  <li><a href="materiale.php?tipo=nickel"><span class="dot"></span>Altro</a></li>
+                <?php endif; ?>
               </ul>
             </div>
           </li>
 
+          
         </ul>
       </nav>
       <!-- end nav -->
