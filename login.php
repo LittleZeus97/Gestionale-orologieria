@@ -1,29 +1,25 @@
-<?php
+﻿<?php
 session_start();
 require_once 'db.php';
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
-    $confirmPassword = $_POST['confirm_password'] ?? '';
 
-    if ($name === '' || $email === '' || $password === '' || $confirmPassword === '') {
+    if ($email === '' || $password === '') {
         $error = 'Compila tutti i campi.';
-    } elseif ($password !== $confirmPassword) {
-        $error = 'Le password non corrispondono.';
     } else {
-        $stmt = $pdo->prepare('SELECT CodUtente FROM utenti WHERE email = ?');
+        $stmt = $pdo->prepare('SELECT CodUtente, nome, password_hash FROM utenti WHERE email = ?');
         $stmt->execute([$email]);
-        if ($stmt->fetch()) {
-            $error = 'Email già registrata.';
-        } else {
-            $hash = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare('INSERT INTO utenti (nome, email, password_hash) VALUES (?, ?, ?)');
-            $stmt->execute([$name, $email, $hash]);
-            header('Location: login.php');
+        $user = $stmt->fetch();
+        if ($user && password_verify($password, $user['password_hash'])) {
+            $_SESSION['user_id'] = $user['CodUtente'];
+            $_SESSION['user_name'] = $user['nome'];
+            header('Location: index.php');
             exit;
+        } else {
+            $error = 'Email o password errati.';
         }
     }
 }

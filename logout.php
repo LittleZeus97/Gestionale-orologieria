@@ -1,0 +1,1 @@
+﻿<?php\r\nsession_start();\r\n = [];\r\nsession_destroy();\r\nheader('Location: index.php');\r\nexit;\r\n
