@@ -1,0 +1,34 @@
+<?php
+require_once 'db.php';
+
+$sql = <<<SQL
+CREATE DATABASE IF NOT EXISTS gestionale_orologieria
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE gestionale_orologieria;
+
+CREATE TABLE IF NOT EXISTS utenti (
+  CodUtente INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS monete (
+  CodMoneta INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(150) NOT NULL,
+  prezzo DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  Materiale VARCHAR(80) NOT NULL,
+  AnnoEmi SMALLINT UNSIGNED NOT NULL,
+  UtentePubbli INT UNSIGNED NOT NULL,
+  FOREIGN KEY (UtentePubbli) REFERENCES utenti(CodUtente)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+SQL;
+
+$pdo->exec($sql);
+echo "Database creato!";
+?>

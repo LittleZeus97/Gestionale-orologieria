@@ -1,3 +1,16 @@
+<?php
+session_start();
+require_once 'db.php';
+
+$stmt = $pdo->query('
+  SELECT m.CodMoneta, m.nome, m.prezzo, m.Materiale, m.AnnoEmi, u.nome AS autore
+  FROM monete m
+  JOIN utenti u ON m.UtentePubbli = u.CodUtente
+');
+$monete = $stmt->fetchAll();
+?>
+
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -479,7 +492,7 @@
             <div class="dropdown">
               <div class="dropdown-label">Epoche</div>
               <ul>
-                <li><a href="anni.php?cat=Euro-Italia"><span class="dot"></span>Euro Ialia</a></li>
+                <li><a href="anni.php?cat=Euro-Italia"><span class="dot"></span>Euro Italia</a></li>
                 <li><a href="anni.php?cat=Repubblica-Italiana"><span class="dot"></span>Repubblica Italiana</a></li>
                 <li><a href="anni.php?cat=Regno-d'Italia-(1861-1922)"><span class="dot"></span>Regno d'Italia (1861-1922)</a></li>
                 <li><a href="anni.php?cat=Regno-d'Italia-(1922-1943)"><span class="dot"></span>Regno d'Italia (1922-1943)</a></li>
@@ -496,9 +509,7 @@
               <ul>
                 <li><a href="materiale.php?tipo=argento"><span class="dot"></span>Argento</a></li>
                 <li><a href="materiale.php?tipo=oro"><span class="dot"></span>Oro</a></li>
-                <li><a href="materiale.php?tipo=nickel"><span class="dot"></span>Nickel</a></li>
-                <li><a href="materiale.php?tipo=rame"><span class="dot"></span>Rame</a></li>
-                <li><a href="materiale.php?tipo=bi-tono"><span class="dot"></span>Bi Tono</a></li>
+                <li><a href="materiale.php?tipo=nickel"><span class="dot"></span>Altro</a></li>
               </ul>
             </div>
           </li>
@@ -527,20 +538,22 @@
     </div>
 
     <div class="coin-grid">
+      <?php foreach ($monete as $moneta): ?>
         <article class="coin-card">
             <div class="coin-image">
                 <img src="https://via.placeholder.com/300x200" alt="Moneta d'oro">
                 <span class="badge">Raro</span>
             </div>
             <div class="coin-info">
-                <h3 class="coin-name">500 Lire "Caravelle" - Prova</h3>
-                <p class="coin-user">Pubblicato da: <strong>@NumisExpert</strong></p> 
+                <h3 class="coin-name"><?= htmlspecialchars($moneta['nome']) ?></h3>
+                <p class="coin-user">Pubblicato da: <strong><?= htmlspecialchars($moneta['autore']) ?></strong></p>
                 <div class="coin-footer">
-                    <span class="coin-price">€ 450,00</span>
-                    <a href="dettagli.php?id=1" class="btn-view">Vedi Dettagli</a>
+                    <span class="coin-price">€ <?= number_format($moneta['prezzo'], 2, ',', '.') ?></span>
+                    <a href="dettagli.php?id=<?= $moneta['CodMoneta'] ?>" class="btn-view">Vedi Dettagli</a>
                 </div>
             </div>
         </article>
+      <?php endforeach; ?>
 
         <article class="coin-card">
             <div class="coin-image">

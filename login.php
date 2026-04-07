@@ -1,17 +1,30 @@
 <?php
 session_start();
+require_once 'db.php';
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $password = trim($_POST['password'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirmPassword = $_POST['confirm_password'] ?? '';
 
-    if ($email === '' || $password === '') {
+    if ($name === '' || $email === '' || $password === '' || $confirmPassword === '') {
         $error = 'Compila tutti i campi.';
+    } elseif ($password !== $confirmPassword) {
+        $error = 'Le password non corrispondono.';
     } else {
-        // Qui puoi inserire la logica di autenticazione con database
-        // ad esempio: verifica email/password, avvia sessione, redirect, ecc.
-        $error = 'Funzionalità di login non ancora implementata.';
+        $stmt = $pdo->prepare('SELECT CodUtente FROM utenti WHERE email = ?');
+        $stmt->execute([$email]);
+        if ($stmt->fetch()) {
+            $error = 'Email già registrata.';
+        } else {
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare('INSERT INTO utenti (nome, email, password_hash) VALUES (?, ?, ?)');
+            $stmt->execute([$name, $email, $hash]);
+            header('Location: login.php');
+            exit;
+        }
     }
 }
 ?>

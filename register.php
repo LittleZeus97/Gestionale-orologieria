@@ -1,20 +1,26 @@
 <?php
 session_start();
+require_once 'db.php';
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $password = trim($_POST['password'] ?? '');
-    $confirmPassword = trim($_POST['confirm_password'] ?? '');
+    $password = $_POST['password'] ?? '';
 
-    if ($name === '' || $email === '' || $password === '' || $confirmPassword === '') {
+    if ($email === '' || $password === '') {
         $error = 'Compila tutti i campi.';
-    } elseif ($password !== $confirmPassword) {
-        $error = 'Le password non corrispondono.';
     } else {
-        // Qui puoi inserire la logica di registrazione nel database
-        $error = 'Funzionalità di registrazione non ancora implementata.';
+        $stmt = $pdo->prepare('SELECT CodUtente, nome, password_hash FROM utenti WHERE email = ?');
+        $stmt->execute([$email]);
+        $user = $stmt->fetch();
+        if ($user && password_verify($password, $user['password_hash'])) {
+            $_SESSION['user_id'] = $user['CodUtente'];
+            $_SESSION['user_name'] = $user['nome'];
+            header('Location: index.php');
+            exit;
+        } else {
+            $error = 'Email o password errati.';
+        }
     }
 }
 ?>
