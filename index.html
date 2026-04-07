@@ -35,21 +35,28 @@
       align-items: center;
       justify-content: flex-end;
       padding: 0 48px;
-      gap: 8px;
     }
 
-    .top-bar a {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      padding: 5px 18px;
-      border-radius: 1px;
-      transition: all 0.25s ease;
-      cursor: pointer;
-    }
+    
+    .top-bar a,
+  .top-bar button {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 5px 18px;
+    border-radius: 1px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  .top-bar form {
+    display: inline-flex;
+  }
 
     /* LOGIN – ghost */
     .btn-login {
@@ -64,7 +71,7 @@
 
     /* SIGN UP – filled */
     .btn-signup {
-      color: var(--deep);
+      color: var(--taupe);
       background: var(--gold);
       border: 1px solid var(--gold);
     }
@@ -73,8 +80,7 @@
       border-color: var(--gold-lt);
     }
 
-    /* PHP note – hidden utility */
-    .top-bar form { display: none; }
+  
 
     /* ─── MAIN HEADER ─────────────────────────────────── */
     header.main-header {
@@ -422,30 +428,15 @@
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════════════
-       TOP BAR  –  Login / Sign Up
-       PHP: action="login.php" | action="register.php"
-  ══════════════════════════════════════════════════════ -->
+  
   <div class="top-bar">
-
-    <!--
-      INTEGRAZIONE PHP/SQL:
-      Sostituire i tag <a> con form POST oppure controllare session_status()
-      e mostrare username/logout se l'utente è già autenticato.
-
-      Esempio:
-        <?php if (isset($_SESSION['user_id'])): ?>
-          <span class="btn-login">Benvenuto, <?= htmlspecialchars($_SESSION['username']) ?></span>
-          <a href="logout.php" class="btn-login">Logout</a>
-        <?php else: ?>
-          <a href="login.php" class="btn-login">Accedi</a>
-          <a href="register.php" class="btn-signup">Registrati</a>  
-        <?php endif; ?>
-    -->
-
-    <a href="login.php" class="btn-login">Accedi</a>
-    <a href="register.php" class="btn-signup">Registrati</a>
-  </div>
+  <form method="post" action="login.php">
+    <button type="submit" class="btn-login">Accedi</button>
+  </form>
+  <form method="post" action="register.php">
+    <button type="submit" class="btn-signup">Registrati</button>
+  </form>
+</div>
 
 
   <!-- ═══════════════════════════════════════════════════
